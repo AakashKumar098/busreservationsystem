@@ -1,0 +1,6 @@
+<h1>Choose Date Page </h1>
+<%= form_with(model: @reservation, url: new_bus_reservation_path(@bus, dateofjourney: "dummy"), local: true, method: :get ,data: { action: 'submit->form#submitForm' }) do |form| %>
+    <%= form.label:"Date Of Journey" %>
+    <%= form.date_field:dateofjourney ,min: Date.today.to_s ,required: true ,class: "p-2"%>
+    <%= form.submit "Submit Date" ,class:"btn btn-primary"%>
+<% end %>

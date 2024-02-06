@@ -1,0 +1,35 @@
+<% bus = Bus.find(params[:bus_id]) %>
+<h1>Reservations At: <%= bus.busname %></h1>
+<table class="table">
+    <thead class="thead-dark">
+        <tr>
+            <th scope="col">S.No.</th>
+            <th scope="col">Bus Name</th>
+            <th scope= "col">From</th>
+            <th scope= "col">To</th>
+            <th scope="col">Seat No booked</th>
+            <th scope="col">Date Of Journey</th>
+    </thead>
+    <tbody>
+       <% noofres = 1 %>
+            <% @reservations.each do|res| %>
+                <tr>
+                    <% bus = Bus.find(res.bus_id) %>
+                    <td><%=noofres %></td>
+                    <% noofres = noofres + 1 %>
+                    <td><%= bus.busname %></td>
+                    <td><%= bus.source_route %></td>
+                    <td><%= bus.destination_route %></td>
+                    <% trav = res.travellers  %>
+                    <td>
+                        <% trav.each do|tra| %>
+                            <%= tra.seat_id %>
+                        <% end %>
+                    </td>
+                    <td>
+                        <%= res.dateofjourney %> 
+                    </td>
+                </tr>
+        <% end %>
+    </tbody>
+</table>

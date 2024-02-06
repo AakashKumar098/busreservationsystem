@@ -1,0 +1,43 @@
+<h1>Current User:<%="#{current_user.name}"%> Reservation</h1>
+<table class="table">
+    <thead class="thead-dark">
+        <tr>
+            <th scope="col">S.No.</th>
+            <th scope="col">Bus Name</th>
+            <th scope= "col">From</th>
+            <th scope= "col">To</th>
+            <th scope="col">seat No booked</th>
+            <th scope="col">Time of Journey</th>
+            <th scope="col">Date of Journey</th>
+            <th scope="col">Cancel Reservation</th>
+        </tr>
+    </thead>
+    <tbody>
+       <% noofres = 1 %>
+            <% @currentuserres.each do|res| %>
+                <tr>
+                    <% bus = Bus.find(res.bus_id) %>
+                    <td><%=noofres %></td>
+                    <% noofres = noofres + 1 %>
+                    <td><%= bus.busname %></td>
+                    <td><%= bus.source_route %></td>
+                    <td><%= bus.destination_route %></td>
+                    <% trav = res.travellers  %>
+                    <td>
+                        <% trav.each do|tra| %>
+                            <%= tra.seat_id %>
+                        <% end %>
+                    </td>
+                    <td>
+                        <%= bus.journey_time_in_hours %>
+                    </td>
+                    <td>
+                        <%= res.dateofjourney %> 
+                    </td>
+                    <td>
+                        <%= link_to "Cancel Reservation", "/buses/#{bus.id}/reservations/#{params[:id]}", method: :delete, remote: true, data: { turbo_method: :delete } ,class:"btn btn-danger"%>
+                    </td>
+                </tr>
+        <% end %>
+    </tbody>
+</table>

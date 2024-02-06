@@ -1,0 +1,11 @@
+<h1>Reservation Details</h1>
+<ul>
+   <%="Bus name: #{@bus.busname}"%></br>
+   <%= "CustomerEmail: #{current_user.email}" %></br>
+   <%= "Source : #{@bus.source_route}" %></br>
+   <%= "Destination : #{@bus.destination_route}" %></br>
+   <%= "seatNo Booked" %>
+   <% @seatid.each do |seat| %>
+        <%= seat %>
+   <% end %>
+</ul>

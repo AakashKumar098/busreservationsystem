@@ -1,0 +1,9 @@
+Current user : <%=current_user.email %>
+<h1>My all Buses</h1>
+<ul>
+    <% @buses.each do|bus| %>
+        <li><%= link_to bus.busname, bus %></li>
+        <hr>
+    <% end %>
+</ul>
+<%= link_to "Add Bus" ,new_bus_path %>

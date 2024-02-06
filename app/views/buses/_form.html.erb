@@ -1,0 +1,52 @@
+<%= form_with(model: bus) do |form| %>
+  <% if bus.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(bus.errors.count, "error") %> prohibited this bus from being saved:</h2>
+
+      <ul>
+        <% bus.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :busname %>
+    <%= form.text_field :busname ,class:"form-control"%>
+  </div>
+
+  <div>
+    <%= form.label :bus_no, style: "display: block" %>
+    <%= form.number_field :bus_no ,class:"form-control" %>
+  </div>
+
+  <div>
+    <%= form.label :source_route, style: "display: block" %>
+    <%= form.text_field :source_route ,class:"form-control" %>
+  </div>
+
+  <div>
+    <%= form.label :destination_route, style: "display: block" %>
+    <%= form.text_field :destination_route ,class:"form-control"%>
+  </div>
+
+  <div>
+    <%= form.label :noofseat, style: "display: block" %>
+    <%= form.number_field :noofseat ,class:"form-control"%>
+  </div>
+
+  <div>
+    <%= form.label :arrival_time, style: "display: block" %>
+    <%= form.datetime_field :arrival_time ,class:"form-control"%>
+  </div>
+
+  <div>
+    <%= form.label :departuretime, style: "display: block" %>
+    <%= form.datetime_field :departuretime ,class:"form-control" %>
+  </div>
+  <br/>
+  <div >
+    <%= form.submit class:"btn btn-primary" %>
+  </div>
+<% end %>
