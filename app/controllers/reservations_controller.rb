@@ -71,7 +71,7 @@ class ReservationsController < ApplicationController
 
     def destroy
         # findig resevaion whose id is mentioned in routes
-        
+        puts("destroy action of res")
         travcoll = Traveller.where(reservation_id:params[:id])
 
         travcoll.each do|trav|
