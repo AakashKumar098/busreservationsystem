@@ -18,18 +18,22 @@
       <% end %>
     </ul>
     <ul class="navbar-nav mr-auto ">
-      <li class="nav-item">
-        <%= link_to "signin" ,new_user_session_path, class:"nav-link text-dark font-weight-bold" %>
-      </li>
-      <li class="nav-item">
-        <%= link_to "signUp" ,new_user_registration_path, class:"nav-link text-dark font-weight-bold" %>
-      </li>
-      <li class="nav-item">
-        <%= link_to "SignOut",destroy_user_session_path,class:"nav-link text-dark font-weight-bold", data: {
-                    turbo_method: :delete,
-                    turbo_confirm: "Are you sure?"
-                  } %>
-      </li>
+      <% if current_user.present? == false %>
+        <li class="nav-item">
+          <%= link_to "signin" ,new_user_session_path, class:"btn btn-success" %>
+        </li>
+        <li class="nav-item">
+          <%= link_to "signUp" ,new_user_registration_path, class:"btn btn-primary" %>
+        </li>
+      <% end %>
+      <% if current_user.present? %>
+        <li class="nav-item">
+          <%= link_to "SignOut",destroy_user_session_path,class:"nav-link text-dark font-weight-bold", data: {
+                      turbo_method: :delete,
+                      turbo_confirm: "Are you sure?"
+                    } ,class:"btn btn-primary"%>
+        </li>
+      <% end %>
     </ul>
   </div>
 </nav>

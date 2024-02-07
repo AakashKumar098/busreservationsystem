@@ -20,13 +20,13 @@ Rails.application.routes.draw do
 
   get "customer" => "home#customerhome"
 
-  get "myallbuses" => "user#showmyallbus"
+  get "myallbuses" => "users#showmyallbus"
 
   get "allbuses"  => "bus#index"
 
-  get "showuserprofile" => "user#profile"
+  get "showusersprofile" => "users#profile"
 
-  get "showmyallreservations" => "reservations#showmyallreservation" ,as: :showmyallreservation
+  get "showmyallreservations" => "users#showmyallreservation" ,as: :showmyallreservation
 
 
   # Defines the root path route ("/")
