@@ -23,9 +23,14 @@ class BusesController < ApplicationController
   # POST /buses or /buses.json
   def create
     @bus = current_user.buses.new(bus_params)
+    if(@bus.noofseat <= 0)
+      flash[:notice]=" No of seat must be Greater than 0 "
+      redirect_to new_bus_path
+      return # so as to prevent double render error 
+    end
     respond_to do |format|
       if @bus.save
-        33.times do|seat_no|
+        @bus.noofseat.times do|seat_no|
           @bus.seats.create!(seat_id:seat_no+1,status:false)
         end
         format.html { redirect_to bus_url(@bus), notice: "Bus was successfully created." }

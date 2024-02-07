@@ -7,93 +7,22 @@
   <div class = "container"> 
     <div>
       <div class= "main">
-            <% (1..28).each do |seat_no| %>
+            <% @bus.noofseat.times.each do |seat_no| %>
               <div class = "child">
-                <% if CheckSeatIsBooked?(seat_no,@bus.id,params[:dateofjourney]) == true %>
-                  <%= form.label:"#{seat_no}" %>
+                <% if CheckSeatIsBooked?(seat_no+1,@bus.id,params[:dateofjourney]) == true %>
+                  <%= form.label:"seatno:#{seat_no+1}" %>
                   <%= check_box_tag "reservation[selected_seats][]",0, nil ,checked:true ,disabled:true%>
                 <% else %>
-                  <%= form.label:"#{seat_no}" %>
-                  <%= check_box_tag "reservation[selected_seats][]", seat_no, nil %>
-                <% end %>
-              </div>
-            <% end %>
-        </div>
-      <div class = "right" >
-            <% (29..33).each do |seat_no| %>
-              <div class = "lschild">
-                <% if CheckSeatIsBooked?(seat_no,@bus.id,params[:dateofjourney]) == true %>
-                  <%= form.label:"#{seat_no}" %>
-                  <%= check_box_tag "reservation[selected_seats][]",0, nil ,checked:true ,disabled:true%>
-                <% else %>
-                  <%= form.label:"#{seat_no}" %>
-                  <%= check_box_tag "reservation[selected_seats][]", seat_no, nil %>
+                  <%= form.label:"seatno#{seat_no+1}" %>
+                  <%= check_box_tag "reservation[selected_seats][]", seat_no+1, nil %>
                 <% end %>
               </div>
             <% end %>
       </div>
-      <br/>
+    </div>
       <div class="actions">
         <%= form.submit "Book Seat" ,class:"btn btn-primary"%>
       </div>
     </div>
   </div>
 <% end %>
-
-
-<style>
-  .main
-    {
-        margin-top:5%;
-        width: 35vw;
-        display: grid;
-        grid-template-columns: repeat(4, 1fr); /* Adjust the number of columns as needed */
-        gap: 5px; 
-    }
-  .child
-  {
-    padding: 46px;
-    border: 1px solid black;
-    width: 20px;
-    height: 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 5px;
-  }
-  .container
-  {
-    width:100vw;
-    display:flex;
-    justify-content:center
-  }
-
-  /* Add a gap after every 2nd column */
-  .main .child:nth-child(2n)
-  {
-    margin-right: 7vw; /* Adjust the margin to create the desired gap */
-    #gap:5vw
-  }
-
-  .right
-  {
-    width:28vw;
-    display:flex;
-    margin-top:50px;
-    justify-content:space-between;
-    gap:5px;
-
-  }
-  .right .lschild
-  {
-    padding: 46px;
-    border: 1px solid black;
-    width: 20px;
-    height: 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 5px;
-  }
-</style>
-
