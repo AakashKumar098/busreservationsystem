@@ -3,16 +3,16 @@
   <%= link_to "Book Ticket" ,choose_date_path(@bus.id) ,class:"btn btn-success"%><br/><br/>
   <% if current_user.present? %> 
     <% if current_user.id == @bus.owner_id %>
-      <%= link_to "Edit this bus", edit_bus_path(@bus) ,class:"btn btn-primary"%>
+      <%= link_to "Edit this bus", edit_bus_owner_bus_path(@bus) ,class:"btn btn-primary"%>
       <br/><br/>
       <%= link_to "show Reservations" , bus_choose_date_path(@bus) ,class:"btn btn-success"%><br/><br/>
-      <%= button_to "Destroy this bus", @bus, method: :delete ,class:"btn btn-danger py-3"%>
+      <%= link_to "Destroy this bus", bus_owner_bus_path(@bus), method: :delete, class: "btn btn-danger py-3", data: { turbo_method: :delete, confirm: "Are you sure?" } %>
     <% end %>
   <% end %>
-  <%= link_to "Back to buses", buses_path ,class:"btn btn-info"%>
+  <%= link_to "Back to buses", bus_owner_buses_path ,class:"btn btn-info"%>
 </div>
 <br/><br/>
-<%= render @bus %>
+<%= render "bus_owner/buses/bus" ,bus:@bus %>
 
 <style>
 

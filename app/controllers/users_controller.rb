@@ -1,10 +1,8 @@
 class UsersController < ApplicationController
-    before_action :authenticate_user! ,only: %i[showmyallreservation showmyallbus]
+    
+    before_action :authenticate_user! ,only: %i[showmyallreservation]
 
 
-    def showmyallbus
-        @buses = current_user.buses
-    end
 
     def profile
         

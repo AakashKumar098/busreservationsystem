@@ -8,7 +8,7 @@
       </div>
       <div class="form-group">
         <input type="text" class="form-control" id="bus_name" name="bus_name" style= "width:250px;" placeholder="Enter Busname">
-        Date Of Journey:<input type="date" class="form-control" id="dateofjourney" name="dateofjourney" style= "width:250px;" min="<%= Date.today %>">
+        Date Of Journey:<input type="date" class="form-control" id="dateofjourney" name="dateofjourney" style= "width:250px;" min="<%= Date.today %>" value="<%= Date.today %>">
       </div>
       <div class="form-group">
         <button type="submit" class="btn btn-primary">Search </button>
@@ -47,10 +47,6 @@
     <% end %>
   </tbody>
 </table>
-<script>
-  var today = new Date().toISOString().split('T')[0];
-  document.getElementById('dateofjourney').value = today;
-</script>
 
 <style>
 .form-row

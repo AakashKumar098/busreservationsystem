@@ -1,4 +1,4 @@
-<%= form_with(model: bus) do |form| %>
+<%= form_with(model: [:bus_owner, bus]) do |form| %>
   <% if bus.errors.any? %>
     <div style="color: red">
       <h2><%= pluralize(bus.errors.count, "error") %> prohibited this bus from being saved:</h2>

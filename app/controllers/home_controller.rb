@@ -45,9 +45,6 @@ class HomeController < ApplicationController
                 noofseatbooked = 0 
                 @res.each do|r|
                     noofseatbooked += r.travellers.count
-                    # puts("travel count#{@travcount}")
-                    # puts(r.inspect)
-                    # puts("#{bus.noofseat - @travcount}")
                 end
                 @seataval << (bus.noofseat - noofseatbooked)
             end

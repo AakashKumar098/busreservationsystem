@@ -1,17 +1,26 @@
 Rails.application.routes.draw do
 
-  resources :buses do
+  namespace :bus_owner do
+    resources :buses, only: [:new, :create, :edit, :update, :destroy] do
+      resources :reservations
+    end
+  end
+
+  resources :buses ,only: [:show ,:index] do
     resources :reservations
   end
 
   get "buses/:bus_id/choosedate" => "reservations#choosedate", as: :choose_date
-  get "buses/:bus_id/buschoosedate" => "buses#choosedate", as: :bus_choose_date
+  
+  get "bus_owner/buses/:bus_id/buschoosedate" => "bus_owner/buses#choosedate", as: :bus_choose_date
+
   devise_for :users
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.
+  
   get "up" => "rails/health#show", as: :rails_health_check
 
   root "home#index"
@@ -20,7 +29,7 @@ Rails.application.routes.draw do
 
   get "customer" => "home#customerhome"
 
-  get "myallbuses" => "users#showmyallbus"
+  get "myallbuses" => "bus_owner/buses#showmyallbus"
 
   get "allbuses"  => "bus#index"
 
@@ -33,7 +42,7 @@ Rails.application.routes.draw do
 
   get "searchbus" => "home#search"
 
-  get "searchbybusname" => "home#searchbybusname"
+  get "searchbybusname" => "bushome#searchbybusname"
 
   get "home" => "home#index"
 
