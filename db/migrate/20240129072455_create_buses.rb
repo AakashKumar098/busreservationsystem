@@ -11,8 +11,6 @@ class CreateBuses < ActiveRecord::Migration[7.1]
 
       t.timestamps
     end
-
-    add_foreign_key :buses, :users, column: :owner_id
-
+      add_foreign_key :buses, :users, column: :owner_id
   end
 end

@@ -11,7 +11,7 @@
               <div class = "child">
                 <% if CheckSeatIsBooked?(seat_no+1,@bus.id,params[:dateofjourney]) == true %>
                   <%= form.label:"seatno:#{seat_no+1}" %>
-                  <%= check_box_tag "reservation[selected_seats][]",0, nil ,checked:true ,disabled:true%>
+                  <%= check_box_tag "reservation[selected_seats][]",seat_no+1, nil ,checked:true ,disabled:true %>
                 <% else %>
                   <%= form.label:"seatno#{seat_no+1}" %>
                   <%= check_box_tag "reservation[selected_seats][]", seat_no+1, nil %>

@@ -37,6 +37,6 @@ Rails.application.routes.draw do
 
   get "home" => "home#index"
 
-
+  get "showavalseats" => "buses#showavalseats" ,as: :showavalseats
   
 end

@@ -24,32 +24,39 @@ class ReservationsController < ApplicationController
         dateofjourney = params[:reservation][:dateofjourney]
         puts("Date of Journey #{dateofjourney}")
         selected_seats1 = params[:reservation][:selected_seats]
+        puts(selected_seats1)
+        #fail
         if (selected_seats1.present? == false )
             flash[:alert]= "Please select more than 0 seats"
             redirect_back(fallback_location: root_path)
             return 
         end
-        #puts("selected seats#{selected_seats1}")
-        @reservation = @bus.reservations.new(user_id:current_user.id,bus_id:@bus.id,dateofjourney:dateofjourney)
+        puts("selected seats#{selected_seats1}")
+        current_bus_reservations = @bus.reservations.where(dateofjourney:dateofjourney) #finding bus all resrvations
+        booked_seat = []
+        if(current_bus_reservations.size != 0 )
+            current_bus_reservations.each do|res|
+                res.travellers.each do|tra|
+                    booked_seat << tra.seat_id
+                end
+            end
+        end
+        #fail
+        @reservation = @bus.reservations.new(user_id:current_user.id,dateofjourney:dateofjourney)
         @reservation.save
+        #puts(@reservation.inspect)
+        #fail
         ActiveRecord::Base.transaction do
             selected_seats1.each do|seatno|
                 #puts("hello")
                 #puts(seatno)
-                s = @bus.seats.find_by(seat_id:seatno)
-                puts(@bus.inspect)
-                puts(s.inspect)
-                if (s.present? && s.status == false)
-                    s.status = true 
-                    #puts("Hello#{seatno}")
-                    s.save
-
-                    Traveller.create(seat_id:seatno,reservation_id:@reservation.id)
+                if (booked_seat.size == 0 || booked_seat.include?(seatno.to_i) == false)
+                    Traveller.create(seat_id:seatno.to_i,reservation_id:@reservation.id)
                     flash[:notice] = "Reservation Done Successfully"
                     #redirect_to bus_reservation_path(@bus,@reservation)
                 else
-                    flash[:error] = "Seat #{seatno} not found."
-                    @reservation.destroy
+                    puts(seatno)
+                    @reservation.delete
                     errorduringres = 1 
                     raise ActiveRecord::Rollback  # Rollback the transaction
                 end

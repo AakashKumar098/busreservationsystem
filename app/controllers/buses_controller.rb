@@ -1,5 +1,5 @@
 class BusesController < ApplicationController
-  before_action :set_bus, only: %i[ show edit  update destroy ]
+  before_action :set_bus, only: %i[  edit  update destroy ]
   #before_action :authenticate_user
   before_action :authenticate_user! ,only: %i[ new create edit destroy update]
   # GET /buses or /buses.json
@@ -9,6 +9,14 @@ class BusesController < ApplicationController
 
   # GET /buses/1 or /buses/1.json
   def show
+    @buses = Bus.all.pluck(:id)
+    puts(@buses)
+    if(@buses.include?(params[:id].to_i) == false)
+      flash[:alert] = "Bus Not Found"
+      redirect_back(fallback_location: root_path)
+    else
+      set_bus
+    end
   end
 
   # GET /buses/new
@@ -78,6 +86,7 @@ class BusesController < ApplicationController
     bus = Bus.find(params[:id])
     @res = bus.reservations.where(dateofjourney:d_o_j)
   end
+
 
   private
     # Use callbacks to share common setup or constraints between actions.

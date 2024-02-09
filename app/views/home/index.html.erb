@@ -2,25 +2,19 @@
 <div class:"flex" style= "display:flex; width:100%; justify-content:space-between">
   <form action="<%= searchbus_path %>" method="get">
     <div class="form-row" >
-      <div class="form-group col-md-4">
+      <div class="form-group">
         <input type="text" class="form-control" style= "width:250px;" id="source" name="source" placeholder="Enter source"><br/>
         <input type="text" class="form-control" style= "width:250px;" id="destination" name="destination" placeholder="Enter destination"><br/>
-        <button type="submit" class="btn btn-primary">Search Buses</button>
+      </div>
+      <div class="form-group">
+        <input type="text" class="form-control" id="bus_name" name="bus_name" style= "width:250px;" placeholder="Enter Busname">
+        Date Of Journey:<input type="date" class="form-control" id="dateofjourney" name="dateofjourney" style= "width:250px;" min="<%= Date.today %>">
+      </div>
+      <div class="form-group">
+        <button type="submit" class="btn btn-primary">Search </button>
       </div>
     </div>
   </form>
-  <br/>
-  <br/>
-  <form action="<%= searchbybusname_path %>" method="get">
-    <div class="form-row">
-      <div class="form-group col-md-4">
-        <input type="text" class="form-control" id="bus_name" name="bus_name" style= "width:250px;" placeholder="Enter Busname"><br/>
-        <button type="submit" class="btn btn-primary">Search Buses</button>
-      </div>
-    </div>
-  </form>
-  <br/>
-  <br/>
 </div>
 <table class="table">
   <thead class="thead-dark">
@@ -29,6 +23,9 @@
       <th scope="col" class="h5">Available Buses</th>
       <th scope="col" class="h5">Source Routes</th>
       <th scope="col" class="h5">Destination Routes</th>
+      <% if @seataval.size != 0 %>
+        <th scope="col" class="h5">Available Seat</th>
+      <% end %>
       <th scope="col" class="h5">Book Ticket</th>
     </tr>
   </thead>
@@ -41,9 +38,27 @@
           <td><%= bus.busname %></td>
           <td><%= bus.source_route %></td>
           <td><%= bus.destination_route %></td>
+          <% if @seataval.size != 0 %>
+            <td><%= @seataval[noofbus-1] %></td>
+          <% end %>
           <td><%=link_to "BookNow" ,bus ,class:"btn btn-success"%></td>
         </tr>
         <% noofbus = noofbus+ 1 %>
     <% end %>
   </tbody>
-</table>                 
+</table>
+<script>
+  var today = new Date().toISOString().split('T')[0];
+  document.getElementById('dateofjourney').value = today;
+</script>
+
+<style>
+.form-row
+{
+  display:flex;
+  gap:30px;
+}
+
+
+
+</style>

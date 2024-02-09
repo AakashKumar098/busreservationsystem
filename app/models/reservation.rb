@@ -10,7 +10,7 @@ class Reservation < ApplicationRecord
   private 
 
   def validate_future_date
-    if dateofjourney.present?  && dateofjourney < Date.today
+    if (dateofjourney.present?  && dateofjourney < Date.today)
       errors.add(:dateofjourney,"should be future date ")
     end
   end
