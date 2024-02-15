@@ -1,9 +1,11 @@
 <h1>New bus</h1>
 
-<%= render "form", bus: @bus %>
 
+  <%= turbo_frame_tag "form" do %>
+    <%= render "form", bus: @bus %>
+  <% end %>
 <br>
-
 <div>
   <%= link_to "Back to buses", buses_path %>
 </div>
+

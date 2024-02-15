@@ -1,0 +1,30 @@
+<h1>Delete Specific Seat</h1><br/><br/>
+
+<form id="delete-travellers-form">
+    <input type="hidden" id="bus_id" name="bus_id" value= <%= params[:bus_id] %>>
+    <input type="hidden" id="reservation_id" name="reservation_id" value=<%=params[:reservation_id]%>>
+</form>
+
+<table class="table">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col" class="h5">S.No.</th>
+      <th scope="col" class="h5">seatNo</th>
+      <th scope="col" class="h5">select to cancel</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% nooftrav = 1 %>
+    <% @trav.each do|t| %>
+        <tr id="trav<%= t.id %>">
+          <th scope="row"><%= nooftrav%></th>
+          <td><%= t.seat_id %></td>
+          <td><input type="checkbox" class="form-check-input trav-select-check" id="trav_<%= t.id%>" data-trav-id="<%= t.id %>" style="border: 1px solid black;"></td>
+          <% nooftrav = nooftrav+ 1 %>
+        </tr>
+    <% end %>
+  </tbody>
+</table>
+<button type="button" id= "delete-travellers" style="display:none;" class="btn btn-danger">Cancel Ticket</button>
+
+

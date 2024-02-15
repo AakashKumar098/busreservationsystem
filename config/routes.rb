@@ -2,13 +2,20 @@ Rails.application.routes.draw do
 
   namespace :bus_owner do
     resources :buses, only: [:new, :create, :edit, :update, :destroy] do
-      resources :reservations
+      resources :reservations, only: [:index]
     end
   end
 
   resources :buses ,only: [:show ,:index] do
-    resources :reservations
+    resources :reservations do 
+      resources:travellers ,only: [:index]do
+        collection do
+          delete:bulk_delete_travellers
+        end
+      end
+    end
   end
+
 
   get "buses/:bus_id/choosedate" => "reservations#choosedate", as: :choose_date
   

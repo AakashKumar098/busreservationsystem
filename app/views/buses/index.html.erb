@@ -8,6 +8,8 @@
     </p>
   <% end %>
 </div>
-<% if current_user.present? && current_user.user_type == "busowner"%>
-  <%= link_to "New bus", new_bus_owner_bus_path ,class:"btn btn-success"%>
+<%= turbo_frame_tag "form" do %>
+  <% if current_user.present? && current_user.user_type == "busowner"%>
+    <%= link_to "New bus", new_bus_owner_bus_path ,class:"btn btn-success"  %>
+  <% end %>
 <% end %>

@@ -1,6 +1,6 @@
 class BusOwner::BusesController < ApplicationController
   # busowner functionality are listed here in this controller 
-  before_action :set_bus, only: %i[ edit  update destroy ]
+  before_action :set_bus, only: %i[ edit  update destroy]
   #before_action :authenticate_user
   before_action :authenticate_user! ,only: %i[ new create edit destroy update showmyallbus]
   # GET /buses or /buses.json

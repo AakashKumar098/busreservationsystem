@@ -35,7 +35,8 @@
                         <%= res.dateofjourney %> 
                     </td>
                     <td>
-                        <%= link_to "Cancel Reservation", "/buses/#{bus.id}/reservations/#{res.id}", remote: true, data: { turbo_method: :delete ,turbo_confirm:"Are You Sure" } ,class:"btn btn-danger"%>
+                        <% link_to "Cancel Reservation", "/buses/#{bus.id}/reservations/#{res.id}", remote: true, data: { turbo_method: :delete ,turbo_confirm:"Are You Sure" } ,class:"btn btn-danger"%>
+                        <%= link_to "Cancel Reservation", "/buses/#{bus.id}/reservations/#{res.id}/travellers",class:"btn btn-danger"%>
                     </td>
                 </tr>
         <% end %>

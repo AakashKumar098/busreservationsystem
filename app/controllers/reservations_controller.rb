@@ -4,7 +4,6 @@ class ReservationsController < ApplicationController
     before_action :authenticate_user! ,only: %i[create  destroy  choosedate]
     
     def new
-        #fail
         @bus = Bus.find(params[:bus_id])
         @reservation = Reservation.new
     end
@@ -19,50 +18,38 @@ class ReservationsController < ApplicationController
 
     def create
         #fail
-        #to delete the selected seat from params we have passed this 
+        #variable to check whether error occured or not during reservation
         errorduringres = 0 
         dateofjourney = params[:reservation][:dateofjourney]
-        puts("Date of Journey #{dateofjourney}")
+        puts(params[:dateofjourney])
         selected_seats1 = params[:reservation][:selected_seats]
-        puts(selected_seats1)
-        #fail
         if (selected_seats1.present? == false )
             flash[:alert]= "Please select more than 0 seats"
             redirect_back(fallback_location: root_path)
             return 
         end
-        puts("selected seats#{selected_seats1}")
         current_bus_reservations = @bus.reservations.where(dateofjourney:dateofjourney) #finding bus all resrvations
-        booked_seat = []
+
+        #picking all travellers seat_id those seat which is booked for that date of journey 
         if(current_bus_reservations.size != 0 )
-            current_bus_reservations.each do|res|
-                res.travellers.each do|tra|
-                    booked_seat << tra.seat_id
-                end
-            end
+            @booked_seat = current_bus_reservations.joins(:travellers).pluck('travellers.seat_id')
+        else
+            @booked_seat= []
         end
-        #fail
         @reservation = @bus.reservations.new(user_id:current_user.id,dateofjourney:dateofjourney)
         @reservation.save
-        #puts(@reservation.inspect)
-        #fail
         ActiveRecord::Base.transaction do
             selected_seats1.each do|seatno|
-                #puts("hello")
-                #puts(seatno)
-                if (booked_seat.size == 0 || booked_seat.include?(seatno.to_i) == false)
+                if (@booked_seat.size == 0 || @booked_seat.include?(seatno.to_i) == false)
                     Traveller.create(seat_id:seatno.to_i,reservation_id:@reservation.id)
                     flash[:notice] = "Reservation Done Successfully"
-                    #redirect_to bus_reservation_path(@bus,@reservation)
                 else
-                    puts(seatno)
                     @reservation.delete
                     errorduringres = 1 
                     raise ActiveRecord::Rollback  # Rollback the transaction
                 end
             end
         end
-        #puts(@reservedseat)
         if(errorduringres == 0)
             redirect_to "/buses/#{@bus.id}/reservations/#{@reservation.id}"
             return
@@ -75,9 +62,6 @@ class ReservationsController < ApplicationController
     def choosedate
 
     end
-
-
-    
 
 
     def show
@@ -95,14 +79,8 @@ class ReservationsController < ApplicationController
         puts("destroy action of res")
         travcoll = Traveller.where(reservation_id:params[:id])
 
-        travcoll.each do|trav|
-           s = @bus.seats.find_by(seat_id:trav.seat_id)
-           s.status = false
-           s.save
-           #puts("hello seat deleted")
-        end
         #deleted all travellers who are under this reservation
-        travcoll.destroy_all
+        travcoll.delete_all
         #deleted specific registration
         res = Reservation.find(params[:id])
         res.destroy!

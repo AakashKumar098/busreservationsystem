@@ -1,9 +1,8 @@
 <h1 align= "center">Book Seat in Bus</h1>
 <h2 align = "center">Bus Name :<%= @bus.busname %></h2>
-<%= form_with(model: [@bus ,@reservation] ,url: "/buses/#{@bus.id}/reservations") do |form| %>
 
-  <%= form.hidden_field :dateofjourney, value: params[:dateofjourney] %>
-
+<%= form_with(model: [@bus ,@reservation] ,url:"/buses/#{@bus.id}/reservations" ) do |form| %>
+  <%= form.hidden_field :dateofjourney, value:params[:dateofjourney] %>
   <div class = "container"> 
     <div>
       <div class= "main">

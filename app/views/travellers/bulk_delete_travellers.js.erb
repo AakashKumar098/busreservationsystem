@@ -1,0 +1,4 @@
+<% params[:trav_ids].each do|trav_id| %>
+    $("#trav<%= trav_id %>").remove()
+<% end %>
+$("#delete-travellers").hide()

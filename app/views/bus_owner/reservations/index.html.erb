@@ -15,21 +15,20 @@
             <% @reservations.each do|res| %>
                 <tr>
                     <% bus = Bus.find(res.bus_id) %>
-                    <td><%=noofres %></td>
+                    <td><%= noofres %></td>
                     <% noofres = noofres + 1 %>
                     <td><%= bus.busname %></td>
                     <td><%= bus.source_route %></td>
                     <td><%= bus.destination_route %></td>
-                    <% trav = res.travellers  %>
                     <td>
-                        <% trav.each do|tra| %>
-                            <%= tra.seat_id %>
+                        <% res.travellers.each do|t| %>
+                            <%= t.seat_id %>
                         <% end %>
                     </td>
                     <td>
                         <%= res.dateofjourney %> 
                     </td>
                 </tr>
-        <% end %>
-    </tbody>
+            <% end %>
+        </tbody>
 </table>
