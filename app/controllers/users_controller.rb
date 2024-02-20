@@ -9,7 +9,7 @@ class UsersController < ApplicationController
     end
 
     def showmyallreservation
-        @currentuserres = current_user.reservations
+        @currentuserres = current_user.reservations.where('dateofjourney >= ?', Date.today)
         #puts(@currentuserres)
     end
     

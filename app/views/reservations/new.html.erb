@@ -1,27 +1,97 @@
 <h1 align= "center">Book Seat in Bus</h1>
 <h2 align = "center">Bus Name :<%= @bus.busname %></h2>
+<div class="container-main">
+  <%= form_with(url:new_bus_reservation_path(@bus), local: true, id:"myForm", method: :get ,class:"field",data: { action: 'submit->form#submitForm' }) do |form| %>
+    
+      <%= form.label :date_of_journey ,id: "labeldoj"%>
+        <% if(params[:dateofjourney] == nil) %>
+          <%= form.date_field :dateofjourney, id: "dateofjourney", min: Date.today.strftime('%Y-%m-%d') ,required: true ,onchange:"submitForm()" %>
+        <% else %>
+          <%= form.date_field :dateofjourney, id: "dateofjourney", min: Date.today.strftime('%Y-%m-%d') ,value:params[:dateofjourney] ,required: true,onchange:"submitForm()" %>
+        <% end %>
+      <% form.submit %>
+  <% end %>
+  <br/><br/>
 
-<%= form_with(model: [@bus ,@reservation] ,url:"/buses/#{@bus.id}/reservations" ) do |form| %>
-  <%= form.hidden_field :dateofjourney, value:params[:dateofjourney] %>
-  <div class = "container"> 
-    <div>
-      <div class= "main">
-            <% @bus.noofseat.times.each do |seat_no| %>
-              <div class = "child">
-                <% if CheckSeatIsBooked?(seat_no+1,@bus.id,params[:dateofjourney]) == true %>
-                  <%= form.label:"seatno:#{seat_no+1}" %>
-                  <%= check_box_tag "reservation[selected_seats][]",seat_no+1, nil ,checked:true ,disabled:true %>
-                <% else %>
-                  <%= form.label:"seatno#{seat_no+1}" %>
-                  <%= check_box_tag "reservation[selected_seats][]", seat_no+1, nil %>
-                <% end %>
-              </div>
-            <% end %>
+  <%= form_with(model: [@bus ,@reservation] ,class:"field",url:"/buses/#{@bus.id}/reservations" ) do |form| %>
+    <%= form.hidden_field :dateofjourney, value:params[:dateofjourney] %>
+    <div class = "container"> 
+      <div>
+        <div class= "main">
+              <% @bus.noofseat.times.each do |seat_no| %>
+                <div class = "child">
+                  <% if CheckSeatIsBooked?(seat_no+1,@bus.id,params[:dateofjourney]) == true %>
+                    <%= form.label:"#{seat_no+1}" %>
+                    <%= check_box_tag "reservation[selected_seats][]",seat_no+1, nil ,checked:true ,disabled:true,class:"check" %>
+                  <% else %>
+                    <%= form.label:"#{seat_no+1}" %>
+                    <%= check_box_tag "reservation[selected_seats][]", seat_no+1, nil,class:"check" %>
+                  <% end %>
+                </div>
+              <% end %>
+        </div>
+      </div>
+      <br/>
+        <div class="actions">
+          <%= form.submit "Book Seat" ,class:"btn btn-primary"%>
+        </div>
       </div>
     </div>
-      <div class="actions">
-        <%= form.submit "Book Seat" ,class:"btn btn-primary"%>
-      </div>
-    </div>
-  </div>
-<% end %>
+  <% end %>
+</div>
+<br/>
+<style>
+  .container-main
+  {
+    width:100%;
+    display:flex;
+    margin-top:5%;
+    
+  }
+  .field
+  {
+    width:50%;
+  }
+  .field:nth-child(1)
+  {
+  padding:0 10%;
+  }
+  .main
+  {
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:10px;
+    width:100%;
+  }
+  .child
+  {
+    border:1px solid black;
+    padding:10px 2px;
+    display:grid;
+    place-items:center;
+  }
+
+  .check
+  {
+    padding:5px;
+    width:20px;
+    height:20px;
+  }
+  #dateofjourney
+  {
+    margin:0 0 0 10px;
+    padding:10px;
+  }
+  #labeldoj
+  {
+    color:black;
+    font-weight:bold ;
+    font-family:san-serif;
+    text-transform:uppercase ;
+  }
+</style>
+<script>
+  function submitForm() {
+      document.getElementById("myForm").submit();
+  }
+</script>

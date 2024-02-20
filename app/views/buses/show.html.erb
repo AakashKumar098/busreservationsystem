@@ -1,6 +1,6 @@
 <br/>
 <div class="buttons">
-  <%= link_to "Book Ticket" ,choose_date_path(@bus.id) ,class:"btn btn-success"%><br/><br/>
+  <%= link_to "Book Ticket" ,new_bus_reservation_path(@bus.id) ,class:"btn btn-success"%><br/><br/>
   <% if current_user.present? %> 
     <% if current_user.id == @bus.owner_id %>
       <%= link_to "Edit this bus", edit_bus_owner_bus_path(@bus) ,class:"btn btn-primary"%>

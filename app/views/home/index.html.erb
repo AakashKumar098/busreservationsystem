@@ -3,20 +3,26 @@
   <form action="<%= searchbus_path %>" method="get">
     <div class="form-row" >
       <div class="form-group">
-        <input type="text" class="form-control" style= "width:250px;" id="source" name="source" placeholder="Enter source"><br/>
-        <input type="text" class="form-control" style= "width:250px;" id="destination" name="destination" placeholder="Enter destination"><br/>
+        <label>Source</label>
+        <input type="text" class="form-control" style= "width:250px;" id="source" name="source" ><br/>
+        <label>Destination</label>
+        <input type="text" class="form-control" style= "width:250px;" id="destination" name="destination"><br/>
       </div>
       <div class="form-group">
-        <input type="text" class="form-control" id="bus_name" name="bus_name" style= "width:250px;" placeholder="Enter Busname">
-        Date Of Journey:<input type="date" class="form-control" id="dateofjourney" name="dateofjourney" style= "width:250px;" min="<%= Date.today %>" value="<%= Date.today %>">
+        <label>Busname</label>
+        <input type="text" class="form-control" id="bus_name" name="bus_name" style= "width:250px;">
+        <br/>
+        <label>Date Of Journey</label>
+        <input type="date" class="form-control" id="dateofjourney" name="dateofjourney" style= "width:250px;" min="<%= Date.today %>" value="<%= Date.today %>">
       </div>
       <div class="form-group">
+        <br/><br/><br/>
         <button type="submit" class="btn btn-primary">Search </button>
       </div>
     </div>
   </form>
 </div>
-<table class="table">
+<table class="table table-bordered">
   <thead class="thead-dark">
     <tr>
       <th scope="col" class="h5">S.No.</th>
@@ -41,7 +47,7 @@
           <% if @seataval.size != 0 %>
             <td><%= @seataval[noofbus-1] %></td>
           <% end %>
-          <td><%=link_to "BookNow" ,bus ,class:"btn btn-success"%></td>
+          <td><%=link_to "BookNow" ,new_bus_reservation_path(bus) ,class:"btn btn-success"%></td>
         </tr>
         <% noofbus = noofbus+ 1 %>
     <% end %>
@@ -49,12 +55,11 @@
 </table>
 
 <style>
-.form-row
-{
-  display:flex;
-  gap:30px;
-}
-
+  .form-row
+  {
+    display:flex;
+    gap:30px;
+  }
 
 
 </style>

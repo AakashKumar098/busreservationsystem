@@ -15,41 +15,28 @@ class HomeController < ApplicationController
     end
 
     def search
-        if(params[:source] != "" && params[:destination] != "" && params[:bus_name] != "")
-            @buses = Bus.where(source_route:params[:source]).where(destination_route:params{:destination}).where(busname:params[:bus_name])
-        elsif(params[:source] != "" && params[:destination] != "" && params[:bus_name] == "")
-            @buses = Bus.where(source_route:params[:source]).where(destination_route:params[:destination])
-        elsif(params[:source] != "" && params[:destination] == "" && params[:bus_name] != "")
-            @buses = Bus.where(source_route:params[:source]).where(busname:params[:bus_name])
-        elsif(params[:source] == "" && params[:destination] != "" && params[:bus_name] != "")
-            @buses = Bus.where(destination_route:params[:destination]).where(busname:params[:bus_name])
-        elsif(params[:source] != "" && params[:destination] == "" && params[:bus_name] == "")
-            @buses = Bus.where(source_route:params[:source])
-        elsif(params[:source] == "" && params[:destination] != "" && params[:bus_name] == "")
-            @buses = Bus.where(destination_route:params[:destination])
-        elsif(params[:source] == "" && params[:destination] == "" && params[:bus_name] != "")
-            @buses = Bus.where(busname:params[:bus_name])
-        else
-            @buses = Bus.all
-        end
+        #fail
+        conditions = {}
+        conditions[:source_route] = params[:source].presence if params[:source].present?
+        conditions[:destination_route] = params[:destination].presence if params[:destination].present?
+        conditions[:busname] = params[:bus_name].presence if params[:bus_name].present?
+        #find all buses whose name is this destination is this and source name is this 
+        @buses = Bus.where(conditions)
+        #fail
         if(@buses.size == 0 )
             flash[:alert] = "Please Enter valid value"
         end
         @seataval = []
         @buses.each do|bus|
-            puts("date of journey #{params[:dateofjourney]}")
+            #puts("date of journey #{params[:dateofjourney]}")
             @res = bus.reservations.where(dateofjourney:params[:dateofjourney])
             if(@res.count == 0 )
                 @seataval <<  bus.noofseat
             else
-                noofseatbooked = 0 
-                @res.each do|r|
-                    noofseatbooked += r.travellers.count
-                end
-                @seataval << (bus.noofseat - noofseatbooked)
+                @seataval << (bus.noofseat - @res.joins(:travellers).count)
             end
         end
-        puts(@seataval)
+        #puts(@seataval)
         #fail
         render "home/index"
     end

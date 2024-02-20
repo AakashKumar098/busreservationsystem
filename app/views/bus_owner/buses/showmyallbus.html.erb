@@ -1,8 +1,29 @@
 <h1>My all Buses</h1>
-<ul>
+
+<table class="table table-bordered">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col" class="h5">S.No.</th>
+      <th scope="col" class="h5">Buses Name</th>
+      <th scope="col" class="h5">Source Routes</th>
+      <th scope="col" class="h5">Destination Routes</th>
+      <th scope="col" class="h5">See Bus</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% noofbus = 1 %>
     <% @buses.each do|bus| %>
-        <li><%= link_to bus.busname, bus_path(bus) %></li>
-        <hr>
+        <tr>
+          <th scope="row"><%= noofbus%></th>
+         
+          <td><%= bus.busname %></td>
+          <td><%= bus.source_route %></td>
+          <td><%= bus.destination_route %></td>
+          <td><%=link_to "show Bus" ,bus ,class:"btn btn-info"%></td>
+        </tr>
+        <% noofbus = noofbus+ 1 %>
     <% end %>
-</ul>
-<%= link_to "Add Bus" ,new_bus_owner_bus_path %>
+  </tbody>
+</table>
+<%= link_to "Add Bus" ,new_bus_owner_bus_path ,class:"btn btn-success" %>
+<br/><br/>

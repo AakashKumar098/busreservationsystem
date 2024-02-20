@@ -1,9 +1,12 @@
 class ReservationsController < ApplicationController
 
-    before_action :set_bus ,only: %i[create  show destroy choosedate]
-    before_action :authenticate_user! ,only: %i[create  destroy  choosedate]
+    before_action :set_bus ,only: %i[create  show destroy ]
+    before_action :authenticate_user! ,only: %i[create  destroy  new]
     
     def new
+        if(params[:dateofjourney] == nil)
+            params[:dateofjourney] = Date.today
+        end
         @bus = Bus.find(params[:bus_id])
         @reservation = Reservation.new
     end
@@ -59,9 +62,6 @@ class ReservationsController < ApplicationController
         end
     end
 
-    def choosedate
-
-    end
 
 
     def show
@@ -92,4 +92,5 @@ class ReservationsController < ApplicationController
         def set_bus
             @bus = Bus.find(params[:bus_id])
         end
+
 end
