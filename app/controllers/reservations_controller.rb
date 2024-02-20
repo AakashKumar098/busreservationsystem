@@ -8,13 +8,25 @@ class ReservationsController < ApplicationController
             params[:dateofjourney] = Date.today
         end
         @bus = Bus.find(params[:bus_id])
-        @reservation = Reservation.new
+        @reservation = @bus.reservations.new
+        #puts("no of seat to book #{params[:no_of_seats_to_book]== nil}")
+        if(params[:no_of_seats_to_book] == nil)
+            3.times {@reservation.travellers.new}
+        else
+            params[:no_of_seats_to_book].to_i.times {@reservation.travellers.new}
+        end
     end
+
+    #  def new 
+    #     @bus = Bus.find(params[:bus_id])
+    #     @reservation = @bus.reservations.new
+    #     3.times { @reservation.travellers.build }
+    #  end
 
     def index
         #fail
         bus = Bus.find(params[:bus_id])
-        d_o_j = params[:bus][:dateofjourney]
+        d_o_j = params[:dateofjourney]
         #puts("dateof journey is =  #{d_o_j}")
         @reservations = bus.reservations.where(dateofjourney:d_o_j)
     end
@@ -39,20 +51,20 @@ class ReservationsController < ApplicationController
         else
             @booked_seat= []
         end
-        @reservation = @bus.reservations.new(user_id:current_user.id,dateofjourney:dateofjourney)
+        @reservation = @bus.reservations.new(reservation_params.merge(user_id:current_user.id))
         @reservation.save
-        ActiveRecord::Base.transaction do
-            selected_seats1.each do|seatno|
-                if (@booked_seat.size == 0 || @booked_seat.include?(seatno.to_i) == false)
-                    Traveller.create(seat_id:seatno.to_i,reservation_id:@reservation.id)
-                    flash[:notice] = "Reservation Done Successfully"
-                else
-                    @reservation.delete
-                    errorduringres = 1 
-                    raise ActiveRecord::Rollback  # Rollback the transaction
-                end
-            end
-        end
+        # ActiveRecord::Base.transaction do
+        #     selected_seats1.each do|seatno|
+        #         if (@booked_seat.size == 0 || @booked_seat.include?(seatno.to_i) == false)
+        #             Traveller.create(seat_id:seatno.to_i,reservation_id:@reservation.id)
+        #             flash[:notice] = "Reservation Done Successfully"
+        #         else
+        #             @reservation.delete
+        #             errorduringres = 1 
+        #             raise ActiveRecord::Rollback  # Rollback the transaction
+        #         end
+        #     end
+        # end
         if(errorduringres == 0)
             redirect_to "/buses/#{@bus.id}/reservations/#{@reservation.id}"
             return
@@ -62,7 +74,15 @@ class ReservationsController < ApplicationController
         end
     end
 
-
+    # def create
+        #     @reservation = Reservation.new(reservation_params)
+        #     fail
+        #     if @reservation.save
+        #       flash[:notice] = "reservation saved successfully"
+        #     else
+        #       render :new
+        #     end
+    # end    
 
     def show
         @seatid = []
@@ -91,6 +111,11 @@ class ReservationsController < ApplicationController
     private
         def set_bus
             @bus = Bus.find(params[:bus_id])
+        end
+
+
+        def reservation_params
+          params.require(:reservation).permit(:dateofjourney,travellers_attributes: [:seat_id])
         end
 
 end

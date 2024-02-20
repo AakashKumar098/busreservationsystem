@@ -1,15 +1,20 @@
 <h1 align= "center">Book Seat in Bus</h1>
 <h2 align = "center">Bus Name :<%= @bus.busname %></h2>
 <div class="container-main">
+<%= form_with(url: new_bus_reservation_path(@bus), local: true, id: "noofseat", method: :get, class: "field", data: { action: 'submit->form#submitForm' }) do |form| %>
+  <%= form.label :no_of_seats_to_book, "Number of Seats to Book" %>
+  <%= form.text_field :no_of_seats_to_book, id: "no_of_seats_to_book", class: "form-control", required: true %>
+  <% form.submit %>
+<% end %>
+
   <%= form_with(url:new_bus_reservation_path(@bus), local: true, id:"myForm", method: :get ,class:"field",data: { action: 'submit->form#submitForm' }) do |form| %>
-    
       <%= form.label :date_of_journey ,id: "labeldoj"%>
         <% if(params[:dateofjourney] == nil) %>
           <%= form.date_field :dateofjourney, id: "dateofjourney", min: Date.today.strftime('%Y-%m-%d') ,required: true ,onchange:"submitForm()" %>
         <% else %>
           <%= form.date_field :dateofjourney, id: "dateofjourney", min: Date.today.strftime('%Y-%m-%d') ,value:params[:dateofjourney] ,required: true,onchange:"submitForm()" %>
         <% end %>
-      <% form.submit %>
+        <% form.submit %>
   <% end %>
   <br/><br/>
 
@@ -31,10 +36,16 @@
               <% end %>
         </div>
       </div>
-      <br/>
-        <div class="actions">
-          <%= form.submit "Book Seat" ,class:"btn btn-primary"%>
+      <br/><br/>
+      <%= form.fields_for :travellers do |traveller_fields| %>
+        <div class="nested-fields">
+          <%= traveller_fields.label :seat_id %>
+          <%= traveller_fields.text_field :seat_id, name:"reservation[travellers_attributes][][seat_id]", class: "form-control" %>
+          <br/><br/>
         </div>
+      <% end %>
+      <div class="actions">
+        <%= form.submit "Book Seat" ,class:"btn btn-primary"%>
       </div>
     </div>
   <% end %>
@@ -46,7 +57,6 @@
     width:100%;
     display:flex;
     margin-top:5%;
-    
   }
   .field
   {
@@ -54,7 +64,7 @@
   }
   .field:nth-child(1)
   {
-  padding:0 10%;
+    padding:0 10%;
   }
   .main
   {
@@ -91,7 +101,16 @@
   }
 </style>
 <script>
-  function submitForm() {
+
+  function submitForm()
+  {
       document.getElementById("myForm").submit();
   }
+
+  $(document).on('turbolinks:load', function() {
+  $('#no_of_seats_to_book').on('input', function() {
+    $('#noofseat').submit();
+  });
+});
+
 </script>

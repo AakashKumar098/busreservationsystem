@@ -6,6 +6,7 @@ class Bus < ApplicationRecord
     validates :destination_route, presence: true ,format: { with: /\A[a-zA-Z]+\z/, message: "only allows letters" }
     validates :noofseat, presence: true,numericality: { only_integer: true }  
     validate :check_no_of_seat
+    
     #validates :arrival_time, presence: true, format: { with: /\A\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\z/, message: "should be in the format YYYY-MM-DD HH:MM:SS" }
     #validates :departuretime, presence: true, format: { with: /\A\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\z/, message: "should be in the format YYYY-MM-DD HH:MM:SS" }
     

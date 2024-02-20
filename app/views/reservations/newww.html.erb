@@ -1,0 +1,10 @@
+<%= form_with(model: [@bus ,@reservation], local: true) do |form| %>
+    <%= form.label :dateofjourney %>
+    <%= form.date_field :dateofjourney %>
+  
+    
+  
+    <%= link_to 'Add Traveller' %><br/>
+  
+    <%= form.submit %>
+  <% end %>

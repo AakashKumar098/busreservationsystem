@@ -5,7 +5,7 @@ class Reservation < ApplicationRecord
   belongs_to :user
   belongs_to :bus
   has_many :travellers ,dependent: :destroy
-
+  accepts_nested_attributes_for :travellers
 
   private 
 
