@@ -10,11 +10,6 @@ class ReservationsController < ApplicationController
         @bus = Bus.find(params[:bus_id])
         @reservation = @bus.reservations.new
         #puts("no of seat to book #{params[:no_of_seats_to_book]== nil}")
-        if(params[:no_of_seats_to_book] == nil)
-            3.times {@reservation.travellers.new}
-        else
-            params[:no_of_seats_to_book].to_i.times {@reservation.travellers.new}
-        end
     end
 
     #  def new 

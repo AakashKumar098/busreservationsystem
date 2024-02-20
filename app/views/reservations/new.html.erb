@@ -1,116 +1,110 @@
-<h1 align= "center">Book Seat in Bus</h1>
-<h2 align = "center">Bus Name :<%= @bus.busname %></h2>
-<div class="container-main">
-<%= form_with(url: new_bus_reservation_path(@bus), local: true, id: "noofseat", method: :get, class: "field", data: { action: 'submit->form#submitForm' }) do |form| %>
-  <%= form.label :no_of_seats_to_book, "Number of Seats to Book" %>
-  <%= form.text_field :no_of_seats_to_book, id: "no_of_seats_to_book", class: "form-control", required: true %>
-  <% form.submit %>
-<% end %>
+<h1 align="center">Book Seat in Bus</h1>
+<h2 align="center">Bus Name: <%= @bus.busname %></h2>
 
-  <%= form_with(url:new_bus_reservation_path(@bus), local: true, id:"myForm", method: :get ,class:"field",data: { action: 'submit->form#submitForm' }) do |form| %>
-      <%= form.label :date_of_journey ,id: "labeldoj"%>
-        <% if(params[:dateofjourney] == nil) %>
-          <%= form.date_field :dateofjourney, id: "dateofjourney", min: Date.today.strftime('%Y-%m-%d') ,required: true ,onchange:"submitForm()" %>
-        <% else %>
-          <%= form.date_field :dateofjourney, id: "dateofjourney", min: Date.today.strftime('%Y-%m-%d') ,value:params[:dateofjourney] ,required: true,onchange:"submitForm()" %>
-        <% end %>
-        <% form.submit %>
+<div class="container-main">
+
+  <%= form_with(url: new_bus_reservation_path(@bus), local: true, id: "dateForm", method: :get, class: "field", data: { action: 'submit->form#submitForm' }) do |form| %>
+    <%= form.label :date_of_journey, id: "labeldoj" %>
+    <% if(params[:dateofjourney] == nil) %>
+      <%= form.date_field :dateofjourney, id: "dateofjourney", min: Date.today.strftime('%Y-%m-%d'), required: true, onchange: "submitDateForm()" %>
+    <% else %>
+      <%= form.date_field :dateofjourney, id: "dateofjourney", min: Date.today.strftime('%Y-%m-%d'), value: params[:dateofjourney], required: true, onchange: "submitDateForm()" %>
+    <% end %>
+    <% form.submit %>
   <% end %>
   <br/><br/>
 
-  <%= form_with(model: [@bus ,@reservation] ,class:"field",url:"/buses/#{@bus.id}/reservations" ) do |form| %>
-    <%= form.hidden_field :dateofjourney, value:params[:dateofjourney] %>
-    <div class = "container"> 
-      <div>
-        <div class= "main">
-              <% @bus.noofseat.times.each do |seat_no| %>
-                <div class = "child">
-                  <% if CheckSeatIsBooked?(seat_no+1,@bus.id,params[:dateofjourney]) == true %>
-                    <%= form.label:"#{seat_no+1}" %>
-                    <%= check_box_tag "reservation[selected_seats][]",seat_no+1, nil ,checked:true ,disabled:true,class:"check" %>
-                  <% else %>
-                    <%= form.label:"#{seat_no+1}" %>
-                    <%= check_box_tag "reservation[selected_seats][]", seat_no+1, nil,class:"check" %>
-                  <% end %>
-                </div>
-              <% end %>
-        </div>
+  <%= form_with(model: [@bus, @reservation], class: "field", url: "/buses/#{@bus.id}/reservations") do |form| %>
+    <%= form.hidden_field :dateofjourney, value: params[:dateofjourney] %>
+    <div class="container">
+      <div class="main">
+        <% @bus.noofseat.times.each do |seat_no| %>
+          <div class="child">
+            <% if CheckSeatIsBooked?(seat_no + 1, @bus.id, params[:dateofjourney]) == true %>
+              <%= form.label :"#{seat_no + 1}" %>
+              <%= check_box_tag "reservation[selected_seats][]", seat_no + 1, nil, checked: true, disabled: true, class: "check", onchange: "handleCheckboxChange(event)" %>
+            <% else %>
+              <%= form.label :"#{seat_no + 1}" %>
+              <%= check_box_tag "reservation[selected_seats][]", seat_no + 1, nil, class: "check", onchange: "handleCheckboxChange(event)" %>
+            <% end %>
+          </div>
+        <% end %>
       </div>
       <br/><br/>
-      <%= form.fields_for :travellers do |traveller_fields| %>
-        <div class="nested-fields">
-          <%= traveller_fields.label :seat_id %>
-          <%= traveller_fields.text_field :seat_id, name:"reservation[travellers_attributes][][seat_id]", class: "form-control" %>
-          <br/><br/>
-        </div>
-      <% end %>
+      <div id="inputContainer"></div>
       <div class="actions">
-        <%= form.submit "Book Seat" ,class:"btn btn-primary"%>
+        <%= form.submit "Book Seat", class: "btn btn-primary" %>
       </div>
     </div>
   <% end %>
 </div>
-<br/>
-<style>
-  .container-main
-  {
-    width:100%;
-    display:flex;
-    margin-top:5%;
-  }
-  .field
-  {
-    width:50%;
-  }
-  .field:nth-child(1)
-  {
-    padding:0 10%;
-  }
-  .main
-  {
-    display:grid;
-    grid-template-columns:repeat(4,1fr);
-    gap:10px;
-    width:100%;
-  }
-  .child
-  {
-    border:1px solid black;
-    padding:10px 2px;
-    display:grid;
-    place-items:center;
-  }
 
-  .check
-  {
-    padding:5px;
-    width:20px;
-    height:20px;
+<style>
+  .container-main {
+    width: 100%;
+    display: flex;
+    margin-top: 5%;
   }
-  #dateofjourney
-  {
-    margin:0 0 0 10px;
-    padding:10px;
+  .field {
+    width: 50%;
   }
-  #labeldoj
-  {
-    color:black;
-    font-weight:bold ;
-    font-family:san-serif;
-    text-transform:uppercase ;
+  .field:nth-child(1) {
+    padding: 0 10%;
+  }
+  .main {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    width: 100%;
+  }
+  .child {
+    border: 1px solid black;
+    padding: 10px 2px;
+    display: grid;
+    place-items: center;
+  }
+  .check {
+    padding: 5px;
+    width: 20px;
+    height: 20px;
+  }
+  #dateofjourney {
+    margin: 0 0 0 10px;
+    padding: 10px;
+  }
+  #labeldoj {
+    color: black;
+    font-weight: bold;
+    font-family: sans-serif;
+    text-transform: uppercase;
   }
 </style>
-<script>
 
-  function submitForm()
-  {
-      document.getElementById("myForm").submit();
+<script>
+  function handleCheckboxChange(event) {
+    var checkbox = event.target;
+    var checkboxID = checkbox.value;
+    var inputFieldName = "seat_" + checkboxID;
+
+    if (checkbox.checked) {
+      var inputContainer = document.getElementById("inputContainer");
+      var inputField = document.createElement("input");
+      inputField.type = "text";
+      inputField.value = checkboxID;
+      inputField.name = "reservation[travellers_attributes][][seat_id]";
+      inputField.className = "form-control";
+      inputField.id = inputFieldName;
+      inputContainer.appendChild(inputField);
+    } else {
+      var inputFieldToRemove = document.getElementById(inputFieldName);
+      if (inputFieldToRemove) {
+        inputFieldToRemove.remove();
+      }
+    }
   }
 
-  $(document).on('turbolinks:load', function() {
-  $('#no_of_seats_to_book').on('input', function() {
-    $('#noofseat').submit();
-  });
-});
 
+  function submitDateForm() {
+    document.getElementById("dateForm").submit();
+  }
 </script>
